@@ -59,7 +59,7 @@
                                     <div style="background-image:url('${value.foto}')"
                                         class="card-header align-items-flex-end">${index++}. ${value.name}</div>
                                     <div class="card-content card-content-padding">
-                                        <p class="date">Berakhir hingga : ${value.waktu} | ${value.status}</p>
+                                        <p class="date">Berakhir hingga : ${value.waktu.replace("T", ", ")} | ${value.status}</p>
                                         <p>Deskripsi : ${value.deskripsi}</p>
                                         <p>Harga Awal : ${value.hargaAwal}</p>
                                     </div>

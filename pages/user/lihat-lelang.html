@@ -73,19 +73,20 @@
             let tblPenawaran = 'penawaran/' + id;
             let cardLelang = $('#detail-lelang-card');
             getData(namaDB, id).then(res => {
-                // console.log(res)
                 let cards = `
                         <div class="card demo-card-header-pic">
                             <div style="background-image:url('${res.data.foto}')"
                                 class="card-header align-items-flex-end">${res.data.name}</div>
                             <div class="card-content card-content-padding">
-                                <p class="date">Berakhir hingga : ${res.data.waktu} | ${res.data.status}</p>
+                                <p class="date">Berakhir hingga : ${res.data.waktu.replace("T", ", ")} | ${res.data.status}</p>
+                                <p class="date">Sisa waktu : <span id="countdown"></span></p>
                                 <p>Deskripsi : ${res.data.deskripsi}</p>
                                 <p>Harga Awal : ${res.data.hargaAwal}</p>
                             </div>
                         </div>
                     `;
                 cardLelang.html(cards);
+                countdownTimer('countdown', res.data.waktu);
             });
             let listPenawar = $('#list-penawar');
             //loop dari tabel penawar
