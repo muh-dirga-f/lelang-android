@@ -1,0 +1,67 @@
+<template>
+    <div class="page no-navbar no-toolbar no-swipeback">
+        <div class="page login-screen-content">
+            <div class="login-screen-title">Login Admin</div>
+            <form id="login-admin">
+                <div class="list">
+                    <ul>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">E-mail</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="email" placeholder="e-mail" />
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Password</div>
+                                <div class="item-input-wrap">
+                                    <input type="password" name="password" placeholder="password" />
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="list">
+                    <ul>
+                        <li><a href="#" class="list-button login-admin">Sign In</a></li>
+                    </ul>
+                    <hr/>
+                    <div class="block-footer">
+                        <p class="text-align-center">Menu lainnya</p>
+                        <p><a href="#" class="link back">Close Login Screen</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+<script>
+    export default (props, {
+        $,
+        $on,
+        $f7
+    }) => {
+        $on('pageInit', () => {
+            $('.login-admin').on('click', function () {
+                var formData = app.form.convertToData('#login-admin');
+                if (formData.email != "" || formData.password != "") {
+                    loginUser(formData).then(res => {
+                        if (res.status) {
+                            app.views.main.router.navigate('/home-admin/');
+                            store.state.users = [];
+                            store.state.users.push(res.dataid, res.data);
+                        } else {
+                            app.dialog.alert(res.pesan);
+                        }
+                    });
+                } else {
+                    app.dialog.alert("E-mail atau Password tidak boleh kosong");
+                }
+            });
+        });
+
+        return $render;
+    }
+</script>

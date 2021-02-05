@@ -1,0 +1,81 @@
+<template>
+    <div class="page">
+        <div class="toolbar tabbar-labels toolbar-bottom">
+            <div class="toolbar-inner">
+                <a href="/home-user/" class="tab-link">
+                    <i class="icon f7-icons">house_alt_fill</i>
+                    <span class="tabbar-label">Home</span>
+                </a>
+                <a href="/lelang-user/" class="tab-link tab-link-active">
+                    <i class="icon f7-icons">cube_box_fill</i>
+                    <span class="tabbar-label">Lelang</span>
+                </a>
+                <a href="/login-user/" class="tab-link">
+                    <i class="icon f7-icons">arrow_right_square_fill</i>
+                    <span class="tabbar-label">Sign Out</span>
+                </a>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="block-title">List Lelang Terkini :</div>
+            <div id="list-cards"></div>
+        </div>
+    </div>
+</template>
+<style>
+    .demo-card-header-pic .card-header {
+        height: 40vw;
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        text-shadow: 2px 2px 4px #000000;
+    }
+
+    .demo-card-header-pic .card-content-padding .date {
+        color: #8e8e93;
+    }
+</style>
+<script>
+    export default (props, {
+        $,
+        $on,
+        $f7
+    }) => {
+        $on('pageInit', () => {
+            let idUser = store.state.users[0];
+            let namaDB = "data-barang";
+            console.log("ikut lelang");
+            let listCards = $('#list-cards');
+            //list realtime
+            firebase.database().ref(namaDB).on('value', function (snapshot) {
+                // console.log(snapshot.val())
+                let rowCards = "";
+                if (snapshot.val()) {
+                    let index = 1;
+                    for (const [key, value] of Object.entries(snapshot.val())) {
+                        // console.log(`${key} == ${idUser}`);
+                        rowCards += `
+                                <div class="card demo-card-header-pic">
+                                    <div style="background-image:url('${value.foto}')"
+                                        class="card-header align-items-flex-end">${index++}. ${value.name}</div>
+                                    <div class="card-content card-content-padding">
+                                        <p class="date">Berakhir hingga : ${value.waktu} | ${value.status}</p>
+                                        <p>Deskripsi : ${value.deskripsi}</p>
+                                        <p>Harga Awal : ${value.hargaAwal}</p>
+                                    </div>
+                                    <div class="card-footer"><div class="link"></div><a href="/lihat-lelang/?id=${key}" class="link">Lihat Lelang</a></div>
+                                </div>
+                            `;
+                    }
+                }
+                if (rowCards != "") {
+                    listCards.html(rowCards);
+                } else {
+                    listCards.html(`<tr><td colspan="9">belum ada data saat ini</td></tr>`);
+                }
+            });
+        });
+
+        return $render;
+    }
+</script>

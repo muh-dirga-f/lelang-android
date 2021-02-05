@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Color theme for statusbar (Android only) -->
+    <meta name="theme-color" content="#2196f3">
+    <!-- Your app title -->
+    <title>My App</title>
+    <!-- Path to Framework7 Library Bundle CSS -->
+    <link rel="stylesheet" href="./framework7-bundle.min.css">
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="./css/app.css">
+    <!-- icon -->
+    <link rel="stylesheet" href="./css/framework7-icons.css">
+</head>
+
+<body>
+    <!-- App root element -->
+    <div id="app">
+
+        <!-- Your main view, should have "view-main" class -->
+        <div class="view view-main">
+            <!-- Initial Page, "data-name" contains page name -->
+            <div data-name="home" class="page no-navbar no-toolbar no-swipeback">
+                <div class="page-content login-screen-content">
+                    <div class="login-screen-title">Login User</div>
+                    <form id="login-user">
+                        <div class="list">
+                            <ul>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">E-mail</div>
+                                        <div class="item-input-wrap">
+                                            <input type="text" name="email" placeholder="e-mail" value="aming@gmail.com" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">Password</div>
+                                        <div class="item-input-wrap">
+                                            <input type="password" name="password" placeholder="password" value="123" />
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="list">
+                            <ul>
+                                <li><a href="#" class="list-button login-user">Sign In</a></li>
+                            </ul>
+                            <hr/>
+                            <div class="block-footer">
+                                <p class="text-align-center">Menu lainnya</p>
+                                <p><a href="/registrasi/">Registrasi</a></p>
+                                <p><a href="/login-admin/">Login Admin</a></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Firebase -->
+    <script src="./js/firebase-app.js"></script>
+    <script src="./js/firebase-database.js"></script>
+    <script src="./js/firebase-storage.js"></script>
+    <script src="./js/firebase.js"></script>
+    <!-- Path to Framework7 Library Bundle JS-->
+    <script type="text/javascript" src="./framework7-bundle.min.js"></script>
+    <!-- Path to your app js-->
+    <script type="text/javascript" src="./js/app.js"></script>
+</body>
+
+</html>

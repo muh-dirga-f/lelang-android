@@ -1,0 +1,122 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="left">
+                    <a class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Back</span>
+                    </a>
+                </div>
+                <div class="title">Form Registrasi User</div>
+                <div class="right"></div>
+            </div>
+        </div>
+        <div class="page-content">
+            <form class="list" id="my-form">
+                <ul>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Nama Lengkap</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="nama" placeholder="Nama Lengkap" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">NIK</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="nik" placeholder="NIK" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Alamat</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="alamat" placeholder="Alamat" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">E-mail</div>
+                                <div class="item-input-wrap">
+                                    <input type="email" name="email" placeholder="E-mail" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Password</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="password" placeholder="Password" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Jenis Kelamin</div>
+                                <div class="item-input-wrap">
+                                    <select name="jk">
+                                        <option value="laki-laki" selected="selected">laki-laki</option>
+                                        <option value="perempuan">perempuan</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">No. HP</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="hp" placeholder="No. HP" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+            <div class="block block-strong row">
+                <div class="col"><a class="button button-fill convert-form-to-data" href="#">Registrasi</a></div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    export default (props, {
+        $,
+        $on,
+        $f7
+    }) => {
+        $on('pageInit', () => {
+            $('.convert-form-to-data').on('click', function () {
+                var formData = $f7.form.convertToData('#my-form');
+                registrasi(formData).then(res => {
+                    // console.log(res)
+                    $f7.dialog.alert(res.pesan);
+                    if(res.status){
+                        $f7.views.main.router.back();
+                    }
+                });
+                // alert(JSON.stringify(formData));
+            });
+        });
+
+        return $render;
+    }
+</script>

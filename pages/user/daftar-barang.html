@@ -1,0 +1,293 @@
+<template>
+    <div class="page">
+        <div class="toolbar tabbar-labels toolbar-bottom">
+            <div class="toolbar-inner">
+                <a href="/home-user/" class="tab-link">
+                    <i class="icon f7-icons">house_alt_fill</i>
+                    <span class="tabbar-label">Home</span>
+                </a>
+                <a href="/lelang-user/" class="tab-link tab-link-active">
+                    <i class="icon f7-icons">cube_box_fill</i>
+                    <span class="tabbar-label">Lelang</span>
+                </a>
+                <a href="/login-user/" class="tab-link">
+                    <i class="icon f7-icons">arrow_right_square_fill</i>
+                    <span class="tabbar-label">Sign Out</span>
+                </a>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="block-title">Daftar Barang yang dilelang</div>
+            <div class="data-table data-table-init card">
+                <div class="card-header">
+                    <div class="data-table-links">
+                        <a class="link popup-open btn-tambah-data" data-popup=".popup-push">
+                            <i class="icon f7-icons">plus</i> Add
+                        </a>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="label-cell">No.</th>
+                                <th class="label-cell">Nama Barang</th>
+                                <th class="label-cell">Deskripsi Barang</th>
+                                <th class="label-cell">Foto Barang</th>
+                                <th class="numeric-cell">Harga Awal</th>
+                                <th class="label-cell">Waktu Berakhir</th>
+                                <th class="numeric-cell">Harga Akhir</th>
+                                <th class="label-cell">Status</th>
+                                <th class="label-cell">Pemenang</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="daftar-barang-table-body">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="popup popup-push">
+            <div class="block page-content">
+                <p>Form Input Data Barang</p>
+                <form class="list" id="my-form">
+                    <ul>
+                        <li style="display: none;">
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">ID Penjual Hide</div>
+                                    <div class="item-input-wrap">
+                                        <input type="text" name="idPenjual" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">Nama Barang</div>
+                                    <div class="item-input-wrap">
+                                        <input type="text" name="name" placeholder="Nama Barang" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">Deskripsi Barang</div>
+                                    <div class="item-input-wrap">
+                                        <textarea name="deskripsi" placeholder="Deskripsi Barang"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">Foto Barang</div>
+                                    <div class="item-input-wrap">
+                                        <input type="file" id="file" />
+                                        <input type="text" name="foto" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">Harga Awal</div>
+                                    <div class="item-input-wrap">
+                                        <input type="text" name="hargaAwal" placeholder="Harga Awal" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">Waktu Berakhir</div>
+                                    <div class="item-input-wrap">
+                                        <input type="datetime-local" name="waktu" placeholder="Please choose..." />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li style="display: none;">
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">Harga Akhir Hide</div>
+                                    <div class="item-input-wrap">
+                                        <input type="text" name="hargaAkhir" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li style="display: none;">
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">Status Hide</div>
+                                    <div class="item-input-wrap">
+                                        <input type="text" name="status" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li style="display: none;">
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">Pemenang Hide</div>
+                                    <div class="item-input-wrap">
+                                        <input type="text" name="pemenang" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+                <div class="block block-strong row">
+                    <div class="col">
+                        <a class="button button-fill popup-close" href="#">Batal</a>
+                    </div>
+                    <div class="col">
+                        <a class="button button-fill convert-form-to-data" href="#">Simpan</a>
+                    </div>
+                    <div class="col">
+                        <a class="button button-fill updata-data" href="#"  data-id="">Update</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    export default (props, {
+        $,
+        $on,
+        $f7
+    }) => {
+        $on('pageInit', () => {
+            // console.log(store.state.users);
+            let idUser = store.state.users[0];
+            let namaDB = "data-barang";
+            console.log("daftarkan barang");
+            let tabelBody = $('#daftar-barang-table-body');
+            //list data barang realtime
+            firebase.database().ref(namaDB).on('value', function (snapshot) {
+                // console.log(snapshot.val())
+                let rowTabel = "";
+                if (snapshot.val()) {
+                    let index = 1;
+                    for (const [key, value] of Object.entries(snapshot.val())) {
+                        // console.log(`${key} == ${idUser}`);
+                        if (value.idPenjual === idUser) {
+                            rowTabel += `
+                                    <tr>
+                                        <td class="label-cell">${index++}</td>
+                                        <td class="label-cell">${value.name}</td>
+                                        <td class="label-cell">${value.deskripsi}</td>
+                                        <td class="label-cell"><img src="${value.foto}" width="100px"></td>
+                                        <td class="numeric-cell">${value.hargaAwal}</td>
+                                        <td class="label-cell">${value.waktu}</td>
+                                        <td class="numeric-cell">${value.hargaAkhir}</td>
+                                        <td class="label-cell">${value.status}</td>
+                                        <td class="label-cell">${value.pemenang}</td>
+                                        <td class="actions-cell">
+                                            <a href="#" class="link icon-only edit" data-id="${key}">
+                                                <i class="icon f7-icons">square_pencil</i>
+                                            </a>
+                                            <a href="#" class="link icon-only hapus" data-id="${key}">
+                                                <i class="icon f7-icons">trash</i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                `;
+                        }
+                    }
+                }
+                if (rowTabel != "") {
+                    tabelBody.html(rowTabel);
+                } else {
+                    tabelBody.html(`<tr><td colspan="9">belum ada data saat ini</td></tr>`);
+                }
+            });
+
+            //btn tambah data
+            $('.btn-tambah-data').on('click', function () {
+                $(`#my-form [name="idPenjual"]`).val(idUser);
+                $(`#my-form [name="name"]`).val("");
+                $(`#my-form [name="deskripsi"]`).val("");
+                $(`#my-form [name="foto"]`).val("");
+                $(`#my-form [name="hargaAwal"]`).val("");
+                $(`#my-form [name="waktu"]`).val("");
+                $(`#my-form [name="hargaAkhir"]`).val("-");
+                $(`#my-form [name="status"]`).val("aktif");
+                $(`#my-form [name="pemenang"]`).val("-");
+                $('.updata-data').parent().hide();
+                $('.convert-form-to-data').parent().show();
+            });
+
+            //simpan data
+            $('.convert-form-to-data').on('click', function () {
+                var formData = $f7.form.convertToData('#my-form');
+                tambahData(namaDB, formData).then(res => {
+                    $f7.dialog.alert(res.pesan);
+                    $f7.popup.close();
+                });
+                // alert(JSON.stringify(formData));
+            });
+
+            //btn hapus data
+            $('#daftar-barang-table-body').on('click', '.hapus', function () {
+                let id = $(this).data('id');
+                $f7.dialog.confirm('Apakah anda yakin ingin menghapus data ini?', function () {
+                    hapusData(namaDB, id).then(res => $f7.dialog.alert(res.pesan));
+                });
+            });
+
+            //btn edit data
+            $('#daftar-barang-table-body').on('click', '.edit', function () {
+                let id = $(this).data('id');
+                getData(namaDB, id).then(res => {
+                    for (const [key, value] of Object.entries(res.data)) {
+                        // console.log(`${key}: ${value}`);
+                        $(`#my-form [name="${key}"]`).val(value);
+                        $f7.popup.open('.popup-push');
+                    }
+                });
+                $('.updata-data').attr("data-id", id);
+                $('.convert-form-to-data').parent().hide();
+                $('.updata-data').parent().show();
+            });
+
+            //update data
+            $('.updata-data').on('click', function() {
+                let id = $(this).data('id');
+                var formData = $f7.form.convertToData('#my-form');
+                updateData(namaDB, formData, id).then(res => {
+                    $f7.dialog.alert(res.pesan);
+                    $f7.popup.close();
+                });
+            });
+
+            //upload gambar
+            $('#file').on('change', function(evt) {
+                evt.stopPropagation();
+                evt.preventDefault();
+                var file = evt.target.files[0];
+                var metadata = {
+                    'contentType': file.type
+                };
+                uploadData(file, metadata, 'barang').then(res => {
+                    res.url.then(hsl =>{
+                        $(`#my-form [name="foto"]`).val(hsl);
+                    })
+                });
+            });
+        });
+
+        return $render;
+    }
+</script>
