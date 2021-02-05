@@ -90,7 +90,8 @@
                                     <div class="item-title item-label">Foto Barang</div>
                                     <div class="item-input-wrap">
                                         <input type="file" id="file" />
-                                        <input type="text" name="foto" />
+                                        <!-- input yang di sembunyikan -->
+                                        <input type="text" name="foto" style="display: none;" />
                                     </div>
                                 </div>
                             </div>
@@ -155,7 +156,7 @@
                         <a class="button button-fill convert-form-to-data" href="#">Simpan</a>
                     </div>
                     <div class="col">
-                        <a class="button button-fill updata-data" href="#"  data-id="">Update</a>
+                        <a class="button button-fill updata-data" href="#" data-id="">Update</a>
                     </div>
                 </div>
             </div>
@@ -195,10 +196,10 @@
                                         <td class="label-cell">${value.status}</td>
                                         <td class="label-cell">${value.pemenang}</td>
                                         <td class="actions-cell">
-                                            <a href="#" class="link icon-only edit" data-id="${key}">
+                                            <a href="#" class="link icon-only edit" data-id="${key}" data-foto="${value.foto}">
                                                 <i class="icon f7-icons">square_pencil</i>
                                             </a>
-                                            <a href="#" class="link icon-only hapus" data-id="${key}">
+                                            <a href="#" class="link icon-only hapus" data-id="${key}" data-foto="${value.foto}">
                                                 <i class="icon f7-icons">trash</i>
                                             </a>
                                         </td>
@@ -216,40 +217,69 @@
 
             //btn tambah data
             $('.btn-tambah-data').on('click', function () {
-                $(`#my-form [name="idPenjual"]`).val(idUser);
-                $(`#my-form [name="name"]`).val("");
-                $(`#my-form [name="deskripsi"]`).val("");
-                $(`#my-form [name="foto"]`).val("");
-                $(`#my-form [name="hargaAwal"]`).val("");
-                $(`#my-form [name="waktu"]`).val("");
-                $(`#my-form [name="hargaAkhir"]`).val("-");
-                $(`#my-form [name="status"]`).val("aktif");
-                $(`#my-form [name="pemenang"]`).val("-");
+                $('#my-form [name="idPenjual"]').val(idUser);
+                $('#my-form [name="name"]').val("");
+                $('#my-form [name="deskripsi"]').val("");
+                $('#my-form [name="foto"]').val("");
+                $('#my-form [name="hargaAwal"]').val("");
+                $('#my-form [name="waktu"]').val("");
+                $('#my-form [name="hargaAkhir"]').val("-");
+                $('#my-form [name="status"]').val("aktif");
+                $('#my-form [name="pemenang"]').val("-");
                 $('.updata-data').parent().hide();
                 $('.convert-form-to-data').parent().show();
             });
 
             //simpan data
             $('.convert-form-to-data').on('click', function () {
-                var formData = $f7.form.convertToData('#my-form');
-                tambahData(namaDB, formData).then(res => {
-                    $f7.dialog.alert(res.pesan);
-                    $f7.popup.close();
-                });
-                // alert(JSON.stringify(formData));
+                let file = $('#file').prop('files')[0];
+                if (file) {
+                    let metadata = {
+                        'contentType': file.type
+                    };
+                    uploadFile(file, metadata, 'barang').then(res => {
+                        if (res.status) {
+                            res.url.then(hsl => {
+                                //masukka url ke inputan
+                                $('#my-form [name="foto"]').val(hsl);
+                                //fungsi simpan
+                                let formData = $f7.form.convertToData('#my-form');
+                                tambahData(namaDB, formData).then(res => {
+                                    $f7.dialog.alert(res.pesan);
+                                    $f7.popup.close();
+                                });
+                            });
+                        } else {
+                            $f7.dialog.alert('Gagal menyimpan data');
+                        }
+                    });
+                } else {
+                    $f7.dialog.alert('pilih foto terlebih dahulu');
+                }
             });
 
             //btn hapus data
             $('#daftar-barang-table-body').on('click', '.hapus', function () {
                 let id = $(this).data('id');
+                let foto = $(this).data('foto');
                 $f7.dialog.confirm('Apakah anda yakin ingin menghapus data ini?', function () {
-                    hapusData(namaDB, id).then(res => $f7.dialog.alert(res.pesan));
+                    //hapus data
+                    hapusData(namaDB, id).then(res => {
+                        if (res.status) {
+                            //hapus file
+                            hapusFile(foto);
+                            $f7.dialog.alert(res.pesan);
+                        } else {
+                            $f7.dialog.alert(res.pesan);
+                        }
+                    });
                 });
             });
 
             //btn edit data
             $('#daftar-barang-table-body').on('click', '.edit', function () {
                 let id = $(this).data('id');
+                let foto = $(this).data('foto');
                 getData(namaDB, id).then(res => {
                     for (const [key, value] of Object.entries(res.data)) {
                         // console.log(`${key}: ${value}`);
@@ -258,33 +288,45 @@
                     }
                 });
                 $('.updata-data').attr("data-id", id);
+                $('.updata-data').attr("data-foto", foto);
                 $('.convert-form-to-data').parent().hide();
                 $('.updata-data').parent().show();
             });
 
             //update data
-            $('.updata-data').on('click', function() {
+            $('.updata-data').on('click', function () {
+                let file = $('#file').prop('files')[0];
                 let id = $(this).data('id');
-                var formData = $f7.form.convertToData('#my-form');
-                updateData(namaDB, formData, id).then(res => {
-                    $f7.dialog.alert(res.pesan);
-                    $f7.popup.close();
-                });
-            });
-
-            //upload gambar
-            $('#file').on('change', function(evt) {
-                evt.stopPropagation();
-                evt.preventDefault();
-                var file = evt.target.files[0];
-                var metadata = {
-                    'contentType': file.type
-                };
-                uploadData(file, metadata, 'barang').then(res => {
-                    res.url.then(hsl =>{
-                        $(`#my-form [name="foto"]`).val(hsl);
-                    })
-                });
+                let foto = $(this).data('foto');
+                if (file) {
+                    let metadata = {
+                        'contentType': file.type
+                    };
+                    hapusFile(foto);
+                    uploadFile(file, metadata, 'barang').then(res => {
+                        if (res.status) {
+                            res.url.then(hsl => {
+                                //masukka url ke inputan
+                                $('#my-form [name="foto"]').val(hsl);
+                                //fungsi update
+                                let formData = $f7.form.convertToData('#my-form');
+                                updateData(namaDB, formData, id).then(res => {
+                                    $f7.dialog.alert(res.pesan);
+                                    $f7.popup.close();
+                                });
+                            });
+                        } else {
+                            $f7.dialog.alert('Gagal menyimpan data');
+                        }
+                    });
+                } else {
+                    //fungsi update
+                    let formData = $f7.form.convertToData('#my-form');
+                    updateData(namaDB, formData, id).then(res => {
+                        $f7.dialog.alert(res.pesan);
+                        $f7.popup.close();
+                    });
+                }
             });
         });
 

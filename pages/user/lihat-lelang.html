@@ -19,15 +19,13 @@
         <!-- FAB -->
         <div class="fab fab-right-bottom">
             <a href="#">
-                <i class="icon f7-icons if-not-md">plus</i>
-                <i class="icon f7-icons if-not-md">xmark</i>
-                <i class="icon material-icons md-only">add</i>
-                <i class="icon material-icons md-only">close</i>
+                <i class="icon f7-icons">plus</i>
+                <i class="icon f7-icons">xmark</i>
             </a>
             <div class="fab-buttons fab-buttons-top">
                 <a class="fab-label-button color-green open-prompt"><span>M</span><span class="fab-label">Input
                         Manual</span></a>
-                <a class="fab-label-button color-orange tes"><span>x2</span><span class="fab-label">Tawar 2x lipat</span></a>
+                <a class="fab-label-button color-orange tes"><span>x2</span><span class="fab-label">Tawar 2x lipat dari penawaran tertinggi</span></a>
             </div>
         </div>
         <div class="page-content">
@@ -141,8 +139,8 @@
             // Prompt
             $('.open-prompt').on('click', function () {
                 $f7.dialog.prompt('Input penawaran anda?', function (input) {
-                    $f7.dialog.confirm('Apakah anda yakin ingin menawar dengan harga Rp. ' +
-                        input + '?',
+                    $f7.dialog.confirm('Apakah anda yakin ingin menawar dengan harga <br/> Rp. ' +
+                        input + ' ?',
                         function () {
                             penawaran(input);
                         });

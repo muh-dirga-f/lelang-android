@@ -71,29 +71,42 @@ async function loginUser(data) {
 }
 
 //* upload gambar
-async function uploadData(file, metadata, folderName) {
+async function uploadFile(file, metadata, folderName) {
+    let status = false;
     let pesan = "";
     let url = "";
     let extFile = "." + file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2);
     // Push to child path.
     await firebase.storage().ref().child(folderName + '/' + Date.now() + extFile).put(file, metadata).then(function (snapshot) {
         pesan = 'Uploaded ' + snapshot.totalBytes + ' bytes.';
-        console.log('File metadata:', snapshot.metadata);
+        status = true;
+        // console.log('File metadata:', snapshot.metadata);
         // Let's get a download URL for the file.
         return url = new Promise((resolve) => {
             snapshot.ref.getDownloadURL().then((dataUrl) => {
                 resolve(dataUrl);
             })
-            
+
         });
     }).catch(function (error) {
         pesan = 'Upload failed: ' + error;
     });
 
     return {
+        "status": status,
         "url": url,
         "pesan": pesan
     };
+}
+//hapus file yang di upload
+function hapusFile(url) {
+    firebase.storage().refFromURL(url).delete().then(() => {
+        console.log("data di store terhapus");
+        // File deleted successfully
+    }).catch((error) => {
+        console.log("data di store gagal terhapus",error);
+        // Uh-oh, an error occurred!
+    });
 }
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!! //
@@ -112,22 +125,25 @@ async function tambahData(namaDB, data) {
         }
     });
     return {
+        "status": status,
         "pesan": pesan,
-        "status": status
     };
 }
 //hapus data
 async function hapusData(namaDB, id) {
     let pesan = "";
+    let status = false;
     await firebase.database().ref(namaDB + "/" + id).remove()
         .then(function () {
             pesan = "Data berhasil dihapus.";
+            status = true;
         })
         .catch(function (error) {
             pesan = "Data gagal dihapus." + error;
         });
     return {
-        "pesan": pesan
+        "status": status,
+        "pesan": pesan,
     };
 }
 //select data
