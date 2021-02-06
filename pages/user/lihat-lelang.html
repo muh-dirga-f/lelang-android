@@ -17,7 +17,7 @@
             </div>
         </div>
         <!-- FAB -->
-        <div class="fab fab-right-bottom">
+        <div id="fab-tawar" class="fab fab-right-bottom">
             <a href="#">
                 <i class="icon f7-icons">plus</i>
                 <i class="icon f7-icons">xmark</i>
@@ -72,7 +72,9 @@
             let id = app.views.main.router.currentRoute.query.id;
             let tblPenawaran = 'penawaran/' + id;
             let cardLelang = $('#detail-lelang-card');
+            let hargaTertinggi = "";
             getData(namaDB, id).then(res => {
+                hargaTertinggi = res.data.hargaAwal; //hargaAwal
                 let cards = `
                         <div class="card demo-card-header-pic">
                             <div style="background-image:url('${res.data.foto}')"
@@ -91,12 +93,14 @@
             let listPenawar = $('#list-penawar');
             //loop dari tabel penawar
             firebase.database().ref(tblPenawaran).on('value', function (snapshot) {
-                // console.log(snapshot.val())
+                console.log(snapshot.val())
                 let list = "";
                 if (snapshot.val()) {
                     let index = 1;
                     for (const [key, value] of Object.entries(snapshot.val())) {
+                        if(hargaTertinggi < value.harga) hargaTertinggi = value.harga;
                         // console.log(`${key} == ${idUser}`);
+                        console.log(hargaTertinggi);
                         list += `
                             <li class="item-content">
                                 <div class="item-media">
@@ -120,7 +124,7 @@
             });
 
             $('.tes').on('click', function () {
-                penawaran(10000, '617diwuqi')
+                penawaran((hargaTertinggi*2), idUser)
             });
 
             function penawaran(harga) {
@@ -140,11 +144,15 @@
             // Prompt
             $('.open-prompt').on('click', function () {
                 $f7.dialog.prompt('Input penawaran anda?', function (input) {
-                    $f7.dialog.confirm('Apakah anda yakin ingin menawar dengan harga <br/> Rp. ' +
-                        input + ' ?',
-                        function () {
-                            penawaran(input);
-                        });
+                    if(input <= hargaTertinggi){
+                        $f7.dialog.alert('Penawaran anda lebih rendah dari harga tertinggi saat ini!');
+                    }else{
+                        $f7.dialog.confirm('Apakah anda yakin ingin menawar dengan harga <br/> Rp. ' +
+                            input + ' ?',
+                            function () {
+                                penawaran(input);
+                            });
+                    }
                 });
             });
         });

@@ -18,6 +18,7 @@ function countdownTimer(idTarger, tanggal) {
             $target.html(days + " hari, " + hours + ":" + minutes + ":" + seconds);
         }else{
             $target.html("selesai");
+            $('#fab-tawar').css('display','none');
             //TODO :
             //* 1. ubah status menjadi nonaktif
             //* 2. nonaktifkan FAB button
