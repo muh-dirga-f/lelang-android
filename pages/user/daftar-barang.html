@@ -172,7 +172,7 @@
         $on('pageInit', () => {
             // console.log(store.state.users);
             let idUser = store.state.users[0];
-            let namaDB = "data-barang";
+            let namaDB = "data-barang/" + idUser;
             console.log("daftarkan barang");
             let tabelBody = $('#daftar-barang-table-body');
             //list data barang realtime
@@ -196,7 +196,7 @@
                                         <td class="label-cell">${value.status}</td>
                                         <td class="label-cell">${value.pemenang}</td>
                                         <td class="actions-cell">
-                                            <a href="/lihat-lelang/?id=${key}" class="link icon-only">
+                                            <a href="/lihat-lelang/?idBarang=${key}&idPenjual=${idUser}" class="link icon-only">
                                                 <i class="icon f7-icons">eye</i>
                                             </a>
                                             <a href="#" class="link icon-only edit" data-id="${key}" data-foto="${value.foto}">
@@ -214,7 +214,7 @@
                 if (rowTabel != "") {
                     tabelBody.html(rowTabel);
                 } else {
-                    tabelBody.html(`<tr><td colspan="9">belum ada data saat ini</td></tr>`);
+                    tabelBody.html(`<tr><td colspan="10">belum ada data saat ini</td></tr>`);
                 }
             });
 
@@ -267,7 +267,7 @@
                 let foto = $(this).data('foto');
                 $f7.dialog.confirm('Apakah anda yakin ingin menghapus data ini?', function () {
                     //hapus data
-                    hapusData(namaDB, id).then(res => {
+                    hapusData(namaDB+'/'+id).then(res => {
                         if (res.status) {
                             //hapus file
                             hapusFile(foto);
@@ -283,7 +283,7 @@
             $('#daftar-barang-table-body').on('click', '.edit', function () {
                 let id = $(this).data('id');
                 let foto = $(this).data('foto');
-                getData(namaDB, id).then(res => {
+                getData(namaDB+'/'+id).then(res => {
                     for (const [key, value] of Object.entries(res.data)) {
                         // console.log(`${key}: ${value}`);
                         $(`#my-form [name="${key}"]`).val(value);
@@ -313,7 +313,7 @@
                                 $('#my-form [name="foto"]').val(hsl);
                                 //fungsi update
                                 let formData = $f7.form.convertToData('#my-form');
-                                updateData(namaDB, formData, id).then(res => {
+                                updateData(namaDB+'/'+id, formData).then(res => {
                                     $f7.dialog.alert(res.pesan);
                                     $f7.popup.close();
                                 });
@@ -325,7 +325,7 @@
                 } else {
                     //fungsi update
                     let formData = $f7.form.convertToData('#my-form');
-                    updateData(namaDB, formData, id).then(res => {
+                    updateData(namaDB+'/'+id, formData).then(res => {
                         $f7.dialog.alert(res.pesan);
                         $f7.popup.close();
                     });

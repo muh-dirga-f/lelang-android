@@ -130,10 +130,10 @@ async function tambahData(namaDB, data) {
     };
 }
 //hapus data
-async function hapusData(namaDB, id) {
+async function hapusData(namaDB) {
     let pesan = "";
     let status = false;
-    await firebase.database().ref(namaDB + "/" + id).remove()
+    await firebase.database().ref(namaDB).remove()
         .then(function () {
             pesan = "Data berhasil dihapus.";
             status = true;
@@ -147,9 +147,9 @@ async function hapusData(namaDB, id) {
     };
 }
 //select data
-async function getData(namaDB, id) {
+async function getData(namaDB) {
     let data = "";
-    await firebase.database().ref(namaDB + "/" + id).once('value').then((snapshot) => {
+    await firebase.database().ref(namaDB).once('value').then((snapshot) => {
         data = snapshot.val();
     });
     return {
@@ -157,9 +157,9 @@ async function getData(namaDB, id) {
     };
 }
 //update data
-async function updateData(namaDB, data, id) {
+async function updateData(namaDB, data) {
     let pesan = "";
-    await firebase.database().ref(namaDB + "/" + id).update(data, function (error) {
+    await firebase.database().ref(namaDB).update(data, function (error) {
         if (error) {
             pesan = "Data tidak dapat disimpan." + error;
         } else {

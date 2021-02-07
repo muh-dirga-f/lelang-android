@@ -52,21 +52,26 @@
                 // console.log(snapshot.val())
                 let rowCards = "";
                 if (snapshot.val()) {
-                    for (const [key, value] of Object.entries(snapshot.val())) {
-                        // console.log(`${key} == ${idUser}`);
-                        if(Date.now() <= Date.parse(value.waktu)){
-                            rowCards += `
-                                    <div class="card demo-card-header-pic">
-                                        <div style="background-image:url('${value.foto}')"
-                                            class="card-header align-items-flex-end">${value.name}</div>
-                                        <div class="card-content card-content-padding">
-                                            <p class="date">Berakhir hingga : ${value.waktu.replace("T", ", ")} | ${value.status}</p>
-                                            <p>Deskripsi : ${value.deskripsi}</p>
-                                            <p>Harga Awal : ${value.hargaAwal}</p>
+                    for (const [k, v] of Object.entries(snapshot.val())) {
+                        // console.log(v);
+                        for (const [key, value] of Object.entries(v)) {
+                            // console.log(`${key} == ${idUser}`);
+                            if (value.status == "aktif") {
+                                if (Date.now() <= Date.parse(value.waktu)) {
+                                    rowCards += `
+                                        <div class="card demo-card-header-pic">
+                                            <div style="background-image:url('${value.foto}')"
+                                                class="card-header align-items-flex-end">${value.name}</div>
+                                            <div class="card-content card-content-padding">
+                                                <p class="date">Berakhir hingga : ${value.waktu.replace("T", ", ")} | ${value.status}</p>
+                                                <p>Deskripsi : ${value.deskripsi}</p>
+                                                <p>Harga Awal : ${value.hargaAwal}</p>
+                                            </div>
+                                            <div class="card-footer"><div class="link"></div><a href="/lihat-lelang/?idBarang=${key}&idPenjual=${k}" class="link">Lihat Lelang</a></div>
                                         </div>
-                                        <div class="card-footer"><div class="link"></div><a href="/lihat-lelang/?id=${key}" class="link">Lihat Lelang</a></div>
-                                    </div>
-                                `;
+                                    `;
+                                }
+                            }
                         }
                     }
                 }
