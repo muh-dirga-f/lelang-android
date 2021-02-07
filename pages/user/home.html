@@ -1,13 +1,13 @@
 <template>
     <div class="page">
-        <!-- <div class="navbar">
+        <div class="navbar">
             <div class="navbar-bg"></div>
             <div class="navbar-inner">
                 <div class="left"></div>
                 <div class="title">Home</div>
                 <div class="right"></div>
             </div>
-        </div> -->
+        </div>
         <div class="toolbar tabbar-labels toolbar-bottom">
             <div class="toolbar-inner">
                 <a href="/home-user/" class="tab-link tab-link-active">
@@ -25,10 +25,38 @@
             </div>
         </div>
         <div class="page-content">
-            <p>Data Member</p>
-            <p>Rating Member</p>
-            <p>Daftar Lelang terkini</p>
-            <p>Select a file below. When it is uploaded, a link will be displayed to the uploaded file.</p>
+            <div class="block-title">Data Member</div>
+            <div class="block">
+                <div class="row">
+                    <div class="col-25">
+                        foto
+                    </div>
+                    <div class="col-75">
+                        <div class="row">
+                            <div class="col-20">Nama</div>
+                            <div class="col-5">:</div>
+                            <div class="col-75"><span id="profil-nama"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-20">Alamat</div>
+                            <div class="col-5">:</div>
+                            <div class="col-75"><span id="profil-alamat"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-20">No.HP</div>
+                            <div class="col-5">:</div>
+                            <div class="col-75"><span id="profil-hp"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-20">Email</div>
+                            <div class="col-5">:</div>
+                            <div class="col-75"><span id="profil-email"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="block-title">Daftar Lelang terkini</div>
+            <p>ganti foto profil.</p>
             <input type="file" id="file" />
         </div>
     </div>
@@ -40,19 +68,19 @@
         $f7
     }) => {
         $on('pageInit', () => {
-            $('#file').on('change', function(evt) {
-                evt.stopPropagation();
-                evt.preventDefault();
-                var file = evt.target.files[0];
-                var metadata = {
-                    'contentType': file.type
-                };
-                uploadData(file, metadata, 'barang').then(res => {
-                    res.url.then(hsl => console.log(hsl))
-                });
+            let idUser = store.state.users[0];
+            let namaDB = "users/" + idUser;
+
+            //data member
+            getData(namaDB).then(res => {
+                // console.log(res);
+                $('#profil-nama').text(res.data.nama);
+                $('#profil-alamat').text(res.data.alamat);
+                $('#profil-hp').text(res.data.hp);
+                $('#profil-email').text(res.data.email);
             });
         });
 
-            return $render;
-        }
+        return $render;
+    }
 </script>

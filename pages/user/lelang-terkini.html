@@ -1,5 +1,18 @@
 <template>
     <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="left">
+                    <a class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Back</span>
+                    </a>
+                </div>
+                <div class="title">Lelang - Lelang Terkini</div>
+                <div class="right"></div>
+            </div>
+        </div>
         <div class="toolbar tabbar-labels toolbar-bottom">
             <div class="toolbar-inner">
                 <a href="/home-user/" class="tab-link">
@@ -45,7 +58,6 @@
         $on('pageInit', () => {
             let idUser = store.state.users[0];
             let namaDB = "data-barang";
-            console.log("ikut lelang");
             let listCards = $('#list-cards');
             //list realtime
             firebase.database().ref(namaDB).on('value', function (snapshot) {
@@ -67,7 +79,7 @@
                                                 <p>Deskripsi : ${value.deskripsi}</p>
                                                 <p>Harga Awal : ${value.hargaAwal}</p>
                                             </div>
-                                            <div class="card-footer"><div class="link"></div><a href="/lihat-lelang/?idBarang=${key}&idPenjual=${k}" class="link">Lihat Lelang</a></div>
+                                            <div class="card-footer"><div class="link"></div><a href="/lihat-lelang/?idBarang=${key}&idPenjual=${k}" class="link">Detail Lelang</a></div>
                                         </div>
                                     `;
                                 }

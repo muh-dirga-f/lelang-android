@@ -1,5 +1,18 @@
 <template>
     <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="left">
+                    <a class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Back</span>
+                    </a>
+                </div>
+                <div class="title">Lelang - Detail Lelang</div>
+                <div class="right"></div>
+            </div>
+        </div>
         <div class="toolbar tabbar-labels toolbar-bottom">
             <div class="toolbar-inner">
                 <a href="/home-user/" class="tab-link">
@@ -25,7 +38,8 @@
             <div class="fab-buttons fab-buttons-top">
                 <a class="fab-label-button color-green open-prompt"><span>M</span><span class="fab-label">Input
                         Manual</span></a>
-                <a class="fab-label-button color-orange tes"><span>x2</span><span class="fab-label">Tawar 2x lipat dari penawaran tertinggi</span></a>
+                <a class="fab-label-button color-orange penawaran-double"><span>x2</span><span class="fab-label">Tawar
+                        2x lipat dari penawaran tertinggi</span></a>
             </div>
         </div>
         <div class="page-content">
@@ -70,22 +84,17 @@
             let idBarang = app.views.main.router.currentRoute.query.idBarang;
             let idPenjual = app.views.main.router.currentRoute.query.idPenjual;
             let namaUser = store.state.users[1].nama;
-            let namaDB = "data-barang/"+idPenjual+"/"+idBarang;
+            let namaDB = "data-barang/" + idPenjual + "/" + idBarang;
             let tblPenawaran = 'penawaran/' + idBarang;
             let cardLelang = $('#detail-lelang-card');
             let hargaTertinggi = "";
-            //cek member
-            if (idPenjual == idUser){
-                console.log("pemilik postingan");
-                $('#fab-tawar').css('display','none')
-            } else {
-                console.log("member");
-            };
-            
-
+            //disable fab jika penjual melihat postingan
+            if (idPenjual == idUser) {
+                $('#fab-tawar').css('display', 'none');
+            }
             getData(namaDB).then(res => {
                 // if(res.data.idPenjual = idUser) console.log("pemilik postingan");
-                hargaTertinggi = res.data.hargaAwal.replace(/\D/g,''); //hargaAwal
+                hargaTertinggi = res.data.hargaAwal.replace(/\D/g, ''); //hargaAwal
                 let cards = `
                         <div class="card demo-card-header-pic">
                             <div style="background-image:url('${res.data.foto}')"
@@ -109,10 +118,28 @@
                 if (snapshot.val()) {
                     let index = 1;
                     for (const [key, value] of Object.entries(snapshot.val())) {
-                        if(hargaTertinggi.replace(/\D/g,'') < value.harga.toString().replace(/\D/g,'')) hargaTertinggi = value.harga;
+                        hargaTertinggi = parseInt(hargaTertinggi.toString().replace(/\D/g, ''));
+                        valueHarga = parseInt(value.harga.toString().replace(/\D/g, ''));
+                        if (hargaTertinggi < valueHarga) hargaTertinggi = valueHarga;
                         // console.log(`${key} == ${idUser}`);
                         // console.log(hargaTertinggi);
-                        list += `
+                        if (idPenjual == idUser) {
+                            list += `
+                                <li class="item-content">
+                                    <div class="item-media">
+                                        ${index++}.
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">Rp. ${value.harga}</div>
+                                        </div>
+                                        <div class="item-subtitle">penawar : ${value.namaPenawar}</div>
+                                        <a href="#" class="link pemenang" data-harga="${value.harga}" data-idpenawar="${value.idPenawar}" data-idlelang="${value.idLelang}" data-nama="${value.namaPenawar}"><i class="icon f7-icons">checkmark_rectangle_fill</i> Pilih Pemenang</a>
+                                    </div>
+                                </li>
+                                `;
+                        } else {
+                            list += `
                             <li class="item-content">
                                 <div class="item-media">
                                     ${index++}.
@@ -122,10 +149,10 @@
                                         <div class="item-title">Rp. ${value.harga}</div>
                                     </div>
                                     <div class="item-subtitle">penawar : ${value.namaPenawar}</div>
-                                    <a href="#" class="link"><i class="icon f7-icons">checkmark_rectangle_fill</i> Pilih Pemenang</a>
                                 </div>
                             </li>
                             `;
+                        }
                     }
                 }
                 if (list != "") {
@@ -135,8 +162,11 @@
                 }
             });
 
-            $('.tes').on('click', function () {
-                penawaran((hargaTertinggi*2), idUser)
+            $('.penawaran-double').on('click', function () {
+                let harga = hargaTertinggi * 2;
+                $f7.dialog.confirm('Apakah anda yakin ingin menawar dengan harga Rp. ' + harga + ' ?', function () {
+                    penawaran(harga, idUser)
+                });
             });
 
             function penawaran(harga) {
@@ -146,8 +176,7 @@
                     'idLelang': idBarang,
                     'namaPenawar': namaUser,
                 }).then(res => {
-                    console.log(res.status)
-                    if(res.status){
+                    if (res.status) {
                         $f7.dialog.alert('Penawaran anda tersimpan!');
                     }
                 });
@@ -156,16 +185,27 @@
             // Prompt
             $('.open-prompt').on('click', function () {
                 $f7.dialog.prompt('Input penawaran anda?', function (input) {
-                    if(input.replace(/\D/g,'') <= hargaTertinggi){
+                    if (input.replace(/\D/g, '') <= hargaTertinggi) {
                         $f7.dialog.alert('Penawaran anda lebih rendah dari harga tertinggi saat ini!');
-                    }else{
+                    } else {
                         $f7.dialog.confirm('Apakah anda yakin ingin menawar dengan harga <br/> Rp. ' +
                             input + ' ?',
                             function () {
-                                penawaran(input.replace(/\D/g,''));
+                                penawaran(input.replace(/\D/g, ''));
                             });
                     }
                 });
+            });
+            //pilih pemenang
+            $('#list-penawar').on('click', '.pemenang', function () {
+                let nama = $(this).attr('data-nama');
+                $f7.dialog.confirm('Apakah anda yakin memilih ' + nama + ' sebagai pemenang lelang?',
+                    function () {
+                        let harga = $(this).attr('data-harga');
+                        let idpenawar = $(this).attr('data-idpenawar');
+                        let idlelang = $(this).attr('data-idlelang');
+                        console.log(harga, nama, idpenawar, idlelang);
+                    });
             });
         });
 
