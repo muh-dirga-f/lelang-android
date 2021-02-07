@@ -74,7 +74,7 @@
             let cardLelang = $('#detail-lelang-card');
             let hargaTertinggi = "";
             getData(namaDB, id).then(res => {
-                hargaTertinggi = res.data.hargaAwal; //hargaAwal
+                hargaTertinggi = res.data.hargaAwal.replace(/\D/g,''); //hargaAwal
                 let cards = `
                         <div class="card demo-card-header-pic">
                             <div style="background-image:url('${res.data.foto}')"
@@ -98,9 +98,9 @@
                 if (snapshot.val()) {
                     let index = 1;
                     for (const [key, value] of Object.entries(snapshot.val())) {
-                        if(hargaTertinggi < value.harga) hargaTertinggi = value.harga;
+                        if(hargaTertinggi.replace(/\D/g,'') < value.harga.toString().replace(/\D/g,'')) hargaTertinggi = value.harga;
                         // console.log(`${key} == ${idUser}`);
-                        console.log(hargaTertinggi);
+                        // console.log(hargaTertinggi);
                         list += `
                             <li class="item-content">
                                 <div class="item-media">
@@ -144,13 +144,13 @@
             // Prompt
             $('.open-prompt').on('click', function () {
                 $f7.dialog.prompt('Input penawaran anda?', function (input) {
-                    if(input <= hargaTertinggi){
+                    if(input.replace(/\D/g,'') <= hargaTertinggi){
                         $f7.dialog.alert('Penawaran anda lebih rendah dari harga tertinggi saat ini!');
                     }else{
                         $f7.dialog.confirm('Apakah anda yakin ingin menawar dengan harga <br/> Rp. ' +
                             input + ' ?',
                             function () {
-                                penawaran(input);
+                                penawaran(input.replace(/\D/g,''));
                             });
                     }
                 });
