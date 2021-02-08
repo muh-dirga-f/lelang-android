@@ -1,0 +1,74 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="left"></div>
+                <div class="title">Home</div>
+                <div class="right"></div>
+            </div>
+        </div>
+        <div class="toolbar tabbar-labels toolbar-bottom">
+            <div class="toolbar-inner">
+                <a href="/home-admin/" class="tab-link tab-link-active">
+                    <i class="icon f7-icons">house_alt_fill</i>
+                    <span class="tabbar-label">Home</span>
+                </a>
+                <a href="/list-data/" class="tab-link">
+                    <i class="icon f7-icons">square_list_fill</i>
+                    <span class="tabbar-label">List Data</span>
+                </a>
+                <a href="/login-user/" class="tab-link">
+                    <i class="icon f7-icons">arrow_right_square_fill</i>
+                    <span class="tabbar-label">Sign Out</span>
+                </a>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="block-title">Data Member</div>
+            <div class="block">
+                <div class="row">
+                    <div class="col-25">
+                        foto
+                    </div>
+                    <div class="col-75">
+                        <div class="row">
+                            <div class="col-20">Nama</div>
+                            <div class="col-5">:</div>
+                            <div class="col-75"><span id="profil-nama"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-20">Email</div>
+                            <div class="col-5">:</div>
+                            <div class="col-75"><span id="profil-email"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="block-title">Daftar Lelang terkini</div>
+            <p>ganti foto profil.</p>
+            <input type="file" id="file" />
+        </div>
+    </div>
+</template>
+<script>
+    export default (props, {
+        $,
+        $on,
+        $f7
+    }) => {
+        $on('pageInit', () => {
+            let idUser = store.state.users[0];
+            let namaDB = "admin/" + idUser;
+
+            //data member
+            getData(namaDB).then(res => {
+                // console.log(res);
+                $('#profil-nama').text(res.data.nama);
+                $('#profil-email').text(res.data.email);
+            });
+        });
+
+        return $render;
+    }
+</script>

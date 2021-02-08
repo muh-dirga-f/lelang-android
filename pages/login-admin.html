@@ -9,7 +9,7 @@
                             <div class="item-inner">
                                 <div class="item-title item-label">E-mail</div>
                                 <div class="item-input-wrap">
-                                    <input type="text" name="email" placeholder="e-mail" />
+                                    <input type="text" name="email" placeholder="e-mail" value="admin@admin.com" />
                                 </div>
                             </div>
                         </li>
@@ -17,7 +17,7 @@
                             <div class="item-inner">
                                 <div class="item-title item-label">Password</div>
                                 <div class="item-input-wrap">
-                                    <input type="password" name="password" placeholder="password" />
+                                    <input type="password" name="password" placeholder="password" value="admin" />
                                 </div>
                             </div>
                         </li>
@@ -47,7 +47,7 @@
             $('.login-admin').on('click', function () {
                 var formData = app.form.convertToData('#login-admin');
                 if (formData.email != "" || formData.password != "") {
-                    loginUser(formData).then(res => {
+                    loginAdmin(formData).then(res => {
                         if (res.status) {
                             app.views.main.router.navigate('/home-admin/');
                             store.state.users = [];

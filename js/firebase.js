@@ -69,6 +69,35 @@ async function loginUser(data) {
         "dataid": dataIdLogin,
     };
 }
+//* login admin
+async function loginAdmin(data) {
+    let status = false;
+    let pesan = "E-mail belum terdaftar!";
+    let dataLogin = "";
+    let dataIdLogin = "";
+    await firebase.database().ref('admin/').once('value').then((snapshot) => {
+        snapshot.forEach((v, i) => {
+            if (v.val().email == data.email) {
+                if (v.val().password == data.password) {
+                    status = true;
+                    pesan = "login berhasil";
+                    dataLogin = v.val();
+                    dataIdLogin = v.key;
+                    return;
+                } else {
+                    pesan = "Password salah!"
+                    status = false;
+                }
+            }
+        });
+    });
+    return {
+        "status": status,
+        "pesan": pesan,
+        "data": dataLogin,
+        "dataid": dataIdLogin,
+    };
+}
 
 //* upload gambar
 async function uploadFile(file, metadata, folderName) {

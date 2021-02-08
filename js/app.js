@@ -16,6 +16,26 @@ const app = new Framework7({
             path: '/login-admin/',
             componentUrl: 'pages/login-admin.html',
         },
+        {
+            path: '/home-admin/',
+            componentUrl: 'pages/admin/home.html',
+        },
+        {
+            path: '/list-data/',
+            componentUrl: 'pages/admin/list-data.html',
+        },
+        {
+            path: '/data-user/',
+            componentUrl: 'pages/admin/data-user.html',
+        },
+        {
+            path: '/data-barang/',
+            componentUrl: 'pages/admin/data-barang.html',
+        },
+        {
+            path: '/data-penawaran/',
+            componentUrl: 'pages/admin/data-penawaran.html',
+        },
         //user-link
         {
             path: '/registrasi/',
