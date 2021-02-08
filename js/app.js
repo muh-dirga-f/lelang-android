@@ -34,6 +34,10 @@ const app = new Framework7({
             componentUrl: 'pages/user/lelang-terkini.html',
         },
         {
+            path: '/histori-penawaran/',
+            componentUrl: 'pages/user/histori-penawaran.html',
+        },
+        {
             path: '/lihat-lelang/',
             componentUrl: 'pages/user/lihat-lelang.html',
         },
@@ -65,7 +69,7 @@ $('.login-user').on('click', function () {
             if (res.status) {
                 app.views.main.router.navigate('/home-user/');
                 store.state.users = [];
-                store.state.users.push(res.dataid,res.data);
+                store.state.users.push(res.dataid, res.data);
             } else {
                 app.dialog.alert(res.pesan);
             }

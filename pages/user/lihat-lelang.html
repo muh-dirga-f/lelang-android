@@ -31,6 +31,7 @@
         </div>
         <!-- FAB -->
         <div id="fab-tawar" class="fab fab-right-bottom">
+            <!-- <a class="fab-label-button color-green open-prompt"><i class="icon f7-icons">plus</i></a> -->
             <a href="#">
                 <i class="icon f7-icons">plus</i>
                 <i class="icon f7-icons">xmark</i>
@@ -46,6 +47,23 @@
             <!-- Card -->
             <div class="block-title">Detail Barang</div>
             <div id="detail-lelang-card"></div>
+            <div class="block-title">Harga Tertinggi saat ini :</div>
+            <div class="block card padding text-align-center" id="harga-tertinggi"></div>
+            <div id="bracket-lelang" style="display: none;">
+                <div class="block-title">Pemenang Lelang :</div>
+                <div class="block card padding" id="pemenang-lelang">
+                    <div class="row">
+                        <div class="col-20">Nama</div>
+                        <div class="col-5">:</div>
+                        <div class="col-75"><span class="p-nama"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-20">Harga</div>
+                        <div class="col-5">:</div>
+                        <div class="col-75"><span class="p-harga"></span></div>
+                    </div>
+                </div>
+            </div>
             <!-- List -->
             <div class="card">
                 <div class="card-header">List Penawar :</div>
@@ -87,14 +105,14 @@
             let namaDB = "data-barang/" + idPenjual + "/" + idBarang;
             let tblPenawaran = 'penawaran/' + idBarang;
             let cardLelang = $('#detail-lelang-card');
-            let hargaTertinggi = "";
+            let hargaTertinggi = 0;
             //disable fab jika penjual melihat postingan
             if (idPenjual == idUser) {
                 $('#fab-tawar').css('display', 'none');
             }
             getData(namaDB).then(res => {
                 // if(res.data.idPenjual = idUser) console.log("pemilik postingan");
-                hargaTertinggi = res.data.hargaAwal.replace(/\D/g, ''); //hargaAwal
+                hargaTertinggi = parseInt(res.data.hargaAwal.toString().replace(/\D/g, '')); //hargaAwal
                 let cards = `
                         <div class="card demo-card-header-pic">
                             <div style="background-image:url('${res.data.foto}')"
@@ -120,7 +138,12 @@
                     for (const [key, value] of Object.entries(snapshot.val())) {
                         hargaTertinggi = parseInt(hargaTertinggi.toString().replace(/\D/g, ''));
                         valueHarga = parseInt(value.harga.toString().replace(/\D/g, ''));
-                        if (hargaTertinggi < valueHarga) hargaTertinggi = valueHarga;
+                        if (hargaTertinggi <= valueHarga) {
+                            hargaTertinggi = valueHarga;
+                            $('#harga-tertinggi').text(hargaTertinggi);
+                        }else{
+                            $('#harga-tertinggi').text(hargaTertinggi);
+                        }
                         // console.log(`${key} == ${idUser}`);
                         // console.log(hargaTertinggi);
                         if (idPenjual == idUser) {
@@ -134,7 +157,7 @@
                                             <div class="item-title">Rp. ${value.harga}</div>
                                         </div>
                                         <div class="item-subtitle">penawar : ${value.namaPenawar}</div>
-                                        <a href="#" class="link pemenang" data-harga="${value.harga}" data-idpenawar="${value.idPenawar}" data-idlelang="${value.idLelang}" data-nama="${value.namaPenawar}"><i class="icon f7-icons">checkmark_rectangle_fill</i> Pilih Pemenang</a>
+                                        <a href="#" class="link pemenang" data-harga="${value.harga}" data-idpenawar="${value.idPenawar}" data-idpenjual="${value.idPenjual}" data-idlelang="${value.idLelang}" data-nama="${value.namaPenawar}"><i class="icon f7-icons">checkmark_rectangle_fill</i> Pilih Pemenang</a>
                                     </div>
                                 </li>
                                 `;
@@ -163,7 +186,8 @@
             });
 
             $('.penawaran-double').on('click', function () {
-                let harga = hargaTertinggi * 2;
+                let hargaTertinggiRefresh = $('#harga-tertinggi').text();
+                let harga = hargaTertinggiRefresh * 2;
                 $f7.dialog.confirm('Apakah anda yakin ingin menawar dengan harga Rp. ' + harga + ' ?', function () {
                     penawaran(harga, idUser)
                 });
@@ -174,6 +198,7 @@
                     'harga': harga,
                     'idPenawar': idUser,
                     'idLelang': idBarang,
+                    'idPenjual': idPenjual,
                     'namaPenawar': namaUser,
                 }).then(res => {
                     if (res.status) {
@@ -184,8 +209,12 @@
             //FAB penawaran
             // Prompt
             $('.open-prompt').on('click', function () {
+                let hargaTertinggiRefresh = $('#harga-tertinggi').text();
+                console.log(hargaTertinggiRefresh)
                 $f7.dialog.prompt('Input penawaran anda?', function (input) {
-                    if (input.replace(/\D/g, '') <= hargaTertinggi) {
+                    hargaTertinggiRefresh = parseInt(hargaTertinggiRefresh.toString().replace(/\D/g, ''));
+                    valueHarga = parseInt(input.toString().replace(/\D/g, ''));
+                    if (valueHarga <= hargaTertinggiRefresh) {
                         $f7.dialog.alert('Penawaran anda lebih rendah dari harga tertinggi saat ini!');
                     } else {
                         $f7.dialog.confirm('Apakah anda yakin ingin menawar dengan harga <br/> Rp. ' +
@@ -196,18 +225,39 @@
                     }
                 });
             });
+            
             //pilih pemenang
             $('#list-penawar').on('click', '.pemenang', function () {
                 let nama = $(this).attr('data-nama');
+                let harga = $(this).attr('data-harga');
+                let idpenawar = $(this).attr('data-idpenawar');
+                let idpenjual = $(this).attr('data-idpenjual');
+                let idlelang = $(this).attr('data-idlelang');
                 $f7.dialog.confirm('Apakah anda yakin memilih ' + nama + ' sebagai pemenang lelang?',
                     function () {
-                        let harga = $(this).attr('data-harga');
-                        let idpenawar = $(this).attr('data-idpenawar');
-                        let idlelang = $(this).attr('data-idlelang');
-                        console.log(harga, nama, idpenawar, idlelang);
+                        data = {
+                            "nama": nama,
+                            "harga": harga,
+                            "idPenawar": idpenawar,
+                            "idPenjual": idpenjual,
+                            "idLelang": idlelang,
+                        }
+                        tambahData('pemenang-lelang/'+idlelang, data)
                     });
             });
+
+            firebase.database().ref('pemenang-lelang/'+idBarang).on('value', function (snapshot) {
+                if(snapshot.val()){
+                    for (const [key, value] of Object.entries(snapshot.val())) {
+                        $('#pemenang-lelang .p-nama').append(value.nama);
+                        $('#pemenang-lelang .p-harga').append(value.harga);
+                        $('#bracket-lelang').show();
+                        let list = $('#list-penawar .item-inner .pemenang').hide()
+                    }
+                }
+            });
         });
+        
 
         return $render;
     }

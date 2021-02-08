@@ -1,0 +1,94 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="left">
+                    <a class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Back</span>
+                    </a>
+                </div>
+                <div class="title">Lelang - Histori Penawaran</div>
+                <div class="right"></div>
+            </div>
+        </div>
+        <div class="toolbar tabbar-labels toolbar-bottom">
+            <div class="toolbar-inner">
+                <a href="/home-user/" class="tab-link">
+                    <i class="icon f7-icons">house_alt_fill</i>
+                    <span class="tabbar-label">Home</span>
+                </a>
+                <a href="/lelang-user/" class="tab-link tab-link-active">
+                    <i class="icon f7-icons">cube_box_fill</i>
+                    <span class="tabbar-label">Lelang</span>
+                </a>
+                <a href="/login-user/" class="tab-link">
+                    <i class="icon f7-icons">arrow_right_square_fill</i>
+                    <span class="tabbar-label">Sign Out</span>
+                </a>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="card">
+                <div class="card-header">Histori :</div>
+                <div class="card-content">
+                    <div class="list media-list no-ios-edges">
+                        <ul id="list-penawar">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    export default (props, {
+        $,
+        $on,
+        $f7
+    }) => {
+        $on('pageInit', () => {
+            let idUser = store.state.users[0];
+            let tblPenawaran = 'penawaran/';
+            let listPenawar = $('#list-penawar');
+            //loop dari tabel penawar
+            firebase.database().ref(tblPenawaran).on('value', function (snapshot) {
+                let list = "";
+                if (snapshot.val()) {
+                    let index = 1;
+                    for (const [k, v] of Object.entries(snapshot.val())) {
+                        for (const [key, value] of Object.entries(v)) {
+                            if (value.idPenawar == idUser) {
+                                list += `
+                                <li class="item-content">
+                                    <div class="item-media">
+                                        ${index++}.
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">Rp. ${value.harga}</div>
+                                        </div>
+                                        <div class="item-subtitle">
+                                            penawar : ${value.namaPenawar}
+                                            <a href="/lihat-lelang/?idBarang=${k}&idPenjual=${value.idPenjual}" class="button button-fill float-right">Lihat</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                `;
+                            }
+                        }
+                    }
+                }
+                if (list != "") {
+                    listPenawar.html(list);
+                } else {
+                    listPenawar.html(`<li class="item-content">belum ada penawaran saat ini</li>`);
+                }
+            });
+        });
+
+        return $render;
+    }
+</script>
