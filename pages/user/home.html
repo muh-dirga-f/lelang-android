@@ -26,41 +26,45 @@
         </div>
         <div class="page-content">
             <div class="block-title">Data Member</div>
-            <div class="block">
-                <div class="row">
-                    <div class="col-25">
-                        foto
-                    </div>
-                    <div class="col-75">
-                        <div class="row">
-                            <div class="col-20">Nama</div>
-                            <div class="col-5">:</div>
-                            <div class="col-75"><span id="profil-nama"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-20">Alamat</div>
-                            <div class="col-5">:</div>
-                            <div class="col-75"><span id="profil-alamat"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-20">No.HP</div>
-                            <div class="col-5">:</div>
-                            <div class="col-75"><span id="profil-hp"></span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-20">Email</div>
-                            <div class="col-5">:</div>
-                            <div class="col-75"><span id="profil-email"></span></div>
-                        </div>
-                    </div>
-                </div>
+            <div class="block card padding">
+            <table>
+                <tr>
+                    <td rowspan="5" style="vertical-align: middle;padding-right: 10px;"><img width="100px" src="https://firebasestorage.googleapis.com/v0/b/test-89d4a.appspot.com/o/profil-user%2Fuser.png?alt=media&token=46614e13-3730-40b4-bd72-bc4e809c56c0" /></td>
+                    <td>Nama</td>
+                    <td>:</td>
+                    <td><span id="profil-nama"></span></td>
+                </tr>
+                <tr>
+                    <td>NIK</td>
+                    <td>:</td>
+                    <td><span id="profil-nik"></span></td>
+                </tr>
+                <tr>
+                    <td>Alamat</td>
+                    <td>:</td>
+                    <td><span id="profil-alamat"></span></td>
+                </tr>
+                <tr>
+                    <td>No.HP</td>
+                    <td>:</td>
+                    <td><span id="profil-hp"></span></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>:</td>
+                    <td><span id="profil-email"></span></td>
+                </tr>
+            </table>
             </div>
-            <div class="block-title">Daftar Lelang terkini</div>
+            <!-- <div class="block-title">Daftar Lelang terkini</div>
             <p>ganti foto profil.</p>
-            <input type="file" id="file" />
+            <input type="file" id="file" /> -->
         </div>
     </div>
 </template>
+<style>
+    .size-50 { font-size: 100px }
+</style>
 <script>
     export default (props, {
         $,
@@ -75,6 +79,7 @@
             getData(namaDB).then(res => {
                 // console.log(res);
                 $('#profil-nama').text(res.data.nama);
+                $('#profil-nik').text(res.data.nik);
                 $('#profil-alamat').text(res.data.alamat);
                 $('#profil-hp').text(res.data.hp);
                 $('#profil-email').text(res.data.email);
