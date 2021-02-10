@@ -249,8 +249,8 @@
             firebase.database().ref('pemenang-lelang/'+idBarang).on('value', function (snapshot) {
                 if(snapshot.val()){
                     for (const [key, value] of Object.entries(snapshot.val())) {
-                        $('#pemenang-lelang .p-nama').append(value.nama);
-                        $('#pemenang-lelang .p-harga').append(value.harga);
+                        $('#pemenang-lelang .p-nama').text(value.nama);
+                        $('#pemenang-lelang .p-harga').text(value.harga);
                         $('#bracket-lelang').show();
                         let list = $('#list-penawar .item-inner .pemenang').hide()
                     }

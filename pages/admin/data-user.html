@@ -42,6 +42,7 @@
                                 <th class="label-cell">Email</th>
                                 <th class="label-cell">Jenis Kelamin</th>
                                 <th class="numeric-cell">No.HP</th>
+                                <th class="label-cell">Password</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -107,6 +108,16 @@
                                 </div>
                             </div>
                         </li>
+                        <li>
+                            <div class="item-content item-input">
+                                <div class="item-inner">
+                                    <div class="item-title item-label">Password</div>
+                                    <div class="item-input-wrap">
+                                        <input type="text" name="password" placeholder="Password" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                 </form>
                 <div class="block block-strong row">
@@ -151,6 +162,7 @@
                             <td class="label-cell">${value.email}</td>
                             <td class="label-cell">${value.jk}</td>
                             <td class="numeric-cell">${value.hp}</td>
+                            <td class="label-cell">${value.password}</td>
                             <td class="actions-cell">
                                 <a href="#" class="link icon-only edit" data-id="${key}">
                                     <i class="icon f7-icons">square_pencil</i>
